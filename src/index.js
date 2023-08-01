@@ -2,7 +2,9 @@ import axios from "axios";
 
 axios.defaults.headers.common["x-api-key"] = "live_s5HaeA4yau3sUEqEWEjLHkqxQulHzNjzVLCDJyEL4xfK5L1hnvvjDyTlURUNIfde";
 
-import { fetchCatByBreed } from "./cat-api";
+
+
+import { fetchCatByBreed, fetchBreeds } from "./cat-api";
 
 
 
@@ -11,8 +13,9 @@ import { fetchCatByBreed } from "./cat-api";
 const breedsList = document.querySelector('.breed-select');
 const loading = document.querySelector('.loader');
 const error = document.querySelector('.error');
+const catInfoImg = document.querySelector('.cat-info-img');
+const catInfoText = document.querySelector('.cat-info-text');
 const catInfo = document.querySelector('.cat-info');
-
 breedsList.addEventListener('change', onBreedsList);
 
 
@@ -22,21 +25,10 @@ breedsList.addEventListener('change', onBreedsList);
 
 
 
-function getBreeds() {
-    
-    const BASE_URL = 'https://api.thecatapi.com/v1';
-    const API_KEY = "x-api-key";
 
-    return fetch(`${BASE_URL}/breeds?API_key=${API_KEY}`)
-    .then(resp => {
-        if (!resp.ok){
-            throw new Error(error.textContent);
-        }
-        return resp.json();
-    })
-}
 
-getBreeds().then(data => breedsList.innerHTML = createSelectList(data)).catch(err => error.textContent);
+fetchBreeds().then(data => breedsList.innerHTML = createSelectList(data)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden")})
+
 
 function createSelectList(arr) {
     return arr.map(({id, name}) => `<option value=${id}>${name}</option>`)
@@ -45,20 +37,28 @@ function createSelectList(arr) {
 function onBreedsList(evt) {
     const breedId = evt.srcElement.value
 
-    fetchCatByBreed(breedId).then(data => console.log(data)).catch(err => error.textContent);
-    console.log(breedId);
+    fetchCatByBreed(breedId).then(data => catInfoImg.innerHTML = createImg(data)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden"), catInfo.classList.remove("is-hidden")});
+    fetchBreeds().then(data => catInfoText.innerHTML = createMarkup(data, breedId)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden"), catInfo.classList.remove("is-hidden")});
     
 }
 
+function createImg(arr) {
+    return arr.map(({url}) => `<img src="${url}" alt="" width="240">`).join("");
+}
 
-// function createMarkup(arr) {
-//     return arr.map(({id, name, temperament, description, }) => ` 
-//     <div class="image"><img src="" alt=""></div>
-//     <div class="info">
-//       <h2 class="title"></h2>
-//       <p></p>
-//       <h3 class="subtitle">Temperament</h3>
-//       <p></p>
-//     </div>`).join("");
+
+function createMarkup(arr, value) {
     
-// }
+    const catInfoObj = arr.find(({id}) => id === value)
+    
+    
+    
+    
+    return (`<h2 class="title">${catInfoObj.name}</h2>
+      <p>${catInfoObj.description}</p>
+      <h3 class="subtitle">Temperament</h3>
+      <p>${catInfoObj.temperament}</p>`);
+
+    
+}
+
