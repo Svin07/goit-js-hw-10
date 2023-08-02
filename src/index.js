@@ -2,7 +2,11 @@ import axios from "axios";
 
 axios.defaults.headers.common["x-api-key"] = "live_s5HaeA4yau3sUEqEWEjLHkqxQulHzNjzVLCDJyEL4xfK5L1hnvvjDyTlURUNIfde";
 
-
+// import SlimSelect from 'slim-select';
+// import 'slim-select/dist/slimselect.css';
+// new SlimSelect({
+//     select: '#selectElement'
+//   })
 
 import { fetchCatByBreed, fetchBreeds } from "./cat-api";
 
