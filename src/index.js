@@ -31,7 +31,16 @@ breedsList.addEventListener('change', onBreedsList);
 
 
 
-fetchBreeds().then(data => breedsList.innerHTML = createSelectList(data)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden")})
+fetchBreeds().then(data => breedsList.innerHTML = createSelectList(data)).catch(err => {
+    error.classList.remove("is-hidden");
+    breedsList.classList.add("is-hidden");
+    
+})
+    .finally(() => {
+    loading.classList.add("is-hidden");
+        breedsList.classList.remove("is-hidden");
+        
+})
 
 
 function createSelectList(arr) {
@@ -39,10 +48,35 @@ function createSelectList(arr) {
 }
 
 function onBreedsList(evt) {
+
+     
     const breedId = evt.srcElement.value
 
-    fetchCatByBreed(breedId).then(data => catInfoImg.innerHTML = createImg(data)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden"), catInfo.classList.remove("is-hidden")});
-    fetchBreeds().then(data => catInfoText.innerHTML = createMarkup(data, breedId)).catch(err => {error.classList.remove("is-hidden"), breedsList.classList.add("is-hidden"), catInfo.classList.add("is-hidden")}).finally(() => {loading.classList.add("is-hidden"), breedsList.classList.remove("is-hidden"), catInfo.classList.remove("is-hidden")});
+    
+
+    fetchCatByBreed(breedId).then(data => catInfoImg.innerHTML = createImg(data))
+        .catch(err => {
+            error.classList.remove("is-hidden");
+            breedsList.classList.add("is-hidden");
+            
+        })
+        .finally(() => {
+            loading.classList.add("is-hidden");
+            breedsList.classList.remove("is-hidden");
+            catInfo.classList.remove("is-hidden");
+        });
+    fetchBreeds().then(data => catInfoText.innerHTML = createMarkup(data, breedId))
+        .catch(err => {
+            error.classList.remove("is-hidden");
+            breedsList.classList.add("is-hidden");
+            
+            
+        })
+        .finally(() => {
+            loading.classList.add("is-hidden");
+            breedsList.classList.remove("is-hidden");
+            catInfo.classList.remove("is-hidden");    
+        });
     
 }
 

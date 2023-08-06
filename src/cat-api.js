@@ -11,9 +11,13 @@ axios.defaults.headers.common["x-api-key"] = "live_s5HaeA4yau3sUEqEWEjLHkqxQulHz
 function fetchBreeds() {
     const breedsList = document.querySelector('.breed-select');
     const loading = document.querySelector('.loader');
+    const catInfo = document.querySelector('.cat-info');
     
     loading.classList.remove("is-hidden");
     breedsList.classList.add("is-hidden");
+    catInfo.classList.add("is-hidden");
+
+
   
 
     const BASE_URL = 'https://api.thecatapi.com/v1';
@@ -30,8 +34,9 @@ function fetchBreeds() {
 
 
 function fetchCatByBreed(breedId) {
-    const catInfo = document.querySelector('.cat-info');
-    catInfo.classList.add("is-hidden");
+    
+    
+    
 
     
     const BASE_URL = 'https://api.thecatapi.com/v1'
